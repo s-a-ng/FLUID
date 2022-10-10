@@ -124,7 +124,7 @@ function lexer:lex()
 			end
 		elseif validchars[self.current_character] then
 			table.insert(tokens, lexer:get_identifier())
-		elseif token[self.current_character] ~= nil then
+		elseif token[self.current_character] then
 			local TokenType = token[self.current_character]
 			table.insert(tokens, {TokenType, self.current_character})
 		end
