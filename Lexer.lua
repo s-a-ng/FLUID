@@ -16,8 +16,6 @@ end
 
 
 local keywords = dict({
-	"const",
-	"dynam",
 	"func",
 	"return",
 	"else",
@@ -33,12 +31,9 @@ local keywords = dict({
 
 local Booleans = dict{"True","False"}
 local Null = "Null"
-
 -- Remember, Regex is for child diddlers
-
 local numbers = dict(".0123456789")
 local validchars = dict("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZ_|&!")
-
 local token_type = {
 	NUMBER  = "T_NUMBER",
 	KEYWORD = "T_KEYWORD",
@@ -66,21 +61,21 @@ local token_type = {
 }
 
 local token = {
-	["+"] = {token_type.PLUS, ""},
-	["-"] = {token_type.MINUS, ""},
-	["*"] = {token_type.MULT, ""},
-	["/"] = {token_type.DIVIDE, ""},
-	["^"] = {token_type.POW, ""},
-	["%"] = {token_type.MOD, ""},
-	["("] = {token_type.RPARAN, ""},
-	[")"] = {token_type.LPARAN, ""},
-	["["] = {token_type.RBRACK, ""},
-	["]"] = {token_type.LBRACK, ""},
-	["{"] = {token_type.RCBRACK, ""},
-	["}"] = {token_type.LCBRACK, ""},
-	[","] = {token_type.COMMA, ""},
-	["."] = {token_type.PERIOD, ""},
-	["\n"] = {token_type.NEWLINE, ""}
+	["+"] = token_type.PLUS,
+	["-"] = token_type.MINUS,
+	["*"] = token_type.MULT,
+	["/"] = token_type.DIVIDE,
+	["^"] = token_type.POW,
+	["%"] = token_type.MOD,
+	["("] = token_type.LPARAN,
+	[")"] = token_type.RPARAN,
+	["["] = token_type.LBRACK,
+	["]"] = token_type.RBRACK,
+	["{"] = token_type.LCBRACK,
+	["}"] = token_type.RCBRACK,
+	[","] = token_type.COMMA,
+	["."] = token_type.PERIOD,
+	["\n"] = token_type.NEWLINE
 }
 
 local lexer = {}
@@ -105,7 +100,6 @@ function lexer:previous_char()
 	self.current_character = self.code:sub(self.pointer,self.pointer)
 end
 
-
 function lexer:lex()
 	local tokens = {}
 	while self.pointer <= #self.code do 
@@ -114,10 +108,10 @@ function lexer:lex()
 			repeat lexer:next_char() until self.current_character == "\n"
 		elseif numbers[self.current_character] then -- number character
 			table.insert(tokens, lexer:get_number())
-			
+
 		elseif self.current_character == "'" or self.current_character == '"' then
 			table.insert(tokens, lexer:get_string())			
-			
+
 		elseif self.current_character == "=" then
 			lexer:next_char()
 			if self.current_character == "=" then
@@ -131,8 +125,8 @@ function lexer:lex()
 		elseif validchars[self.current_character] then
 			table.insert(tokens, lexer:get_identifier())
 		elseif token[self.current_character] ~= nil then
-			table.insert(tokens, token[self.current_character])
-			
+			local TokenType = token[self.current_character]
+			table.insert(tokens, {TokenType, self.current_character})
 		end
 	end
 	return tokens
