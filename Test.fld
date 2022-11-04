@@ -1,19 +1,28 @@
 @comment test
-hello = "hello"
-myTable = (hello, "object 1") @table index will start at 0
 
-print{myTable[1]} @ "object 1"
+hello = "hello" @ Process Global
+myTable = [hello, "object 1"] @array index will start at 0
 
-while 1 == 1 =>
+dictionary = {
+  Dick = "";
+}
+
+print(myTable[1]) @ "object 1"
+
+while (1 == 1) {
     break
-end
+}
 
-@ i am a comment
+@i am a comment
 
-if True => 
-    hello{}
-end
+if (true) {
+    hello()
+}
 
-func hello {para1, para2} =>
+function hello(para1, para2) {
     return hello + " world" @hello world
-end
+}
+
+for Index, Value in myTable { -- Key map for both objects and arrays
+
+}
